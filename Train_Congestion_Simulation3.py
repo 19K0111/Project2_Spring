@@ -74,6 +74,7 @@ def move(passengers, cv: canvas):
                         elif person.x == person.tx:
                             if person.y == person.ty:
                                 person.status = "Wait"
+                                seats[get_seat_id(person)].is_available = False
                             elif person.y-person.ty > 0:
                                 person.direction = "Up"
                                 forward(person)
@@ -84,12 +85,14 @@ def move(passengers, cv: canvas):
                         if person.y > 0:
                             if person.x == person.tx and person.y == person.ty:
                                 person.status = "Wait"
+                                seats[get_seat_id(person)].is_available = False
                             else:
                                 person.direction = "Up"
                                 forward(person)
                         else:
                             if person.x == person.tx and person.y == person.ty:
                                 person.status = "Wait"
+                                seats[get_seat_id(person)].is_available = False
                             else:
                                 person.direction = "Down"
                                 forward(person)
@@ -151,6 +154,7 @@ def move(passengers, cv: canvas):
                 #     person.direction = "Down"
             if person.x == person.tx and person.y == person.ty:
                 person.status = "Wait"
+                seats[get_seat_id(person)].is_available = False
             else:
                 if -2 <= person.y <= 2:
                     person.status = "Get on"
@@ -239,6 +243,12 @@ def nearest_seat(person: Passenger, st: Seat):
             i.tx = seats[inv_c[target]].x
             i.ty = seats[inv_c[target]].y
 
+# 参考：https://techacademy.jp/magazine/19140
+
+def get_seat_id(person: Passenger):
+    for s in seats:
+        if s.x == person.x and s.y == person.y:
+            return s.id
 
 def nearest_door(person: Passenger):
     # ドアの座標：(±5, ±2), (±15, ±2) 複合任意
@@ -261,7 +271,6 @@ def turn(passengers: list):
     for person in passengers:
         person.get_off_station -= 1
 
-# 参考：https://techacademy.jp/magazine/19140
 
 
 def inverse_dict(d):
